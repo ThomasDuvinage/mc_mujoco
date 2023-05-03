@@ -84,7 +84,7 @@ if(DEFINED MUJOCO_ROOT_INCLUDE_DIR)
 endif()
 target_include_directories(mc_mujoco_lib PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/include")
 target_include_directories(mc_mujoco_lib PRIVATE "${imgui_DIR}" "${implot_DIR}" "${mc_rtc-imgui_DIR}" "${assets_DIR}" "${ImGuizmo_DIR}" "${PROJECT_SOURCE_DIR}/ext/pugixml")
-target_link_libraries(mc_mujoco_lib PUBLIC mc_rtc::mc_control mc_rtc::mc_control_client ${CMAKE_DL_LIBS} "${TORCH_LIBRARIES}")
+target_link_libraries(mc_mujoco_lib PUBLIC mc_rtc::mc_control mc_rtc::mc_control_client ${CMAKE_DL_LIBS})
 if(UNIX)
   set(NO_AS_NEEDED "-Wl,--no-as-needed")
   set(AS_NEEDED "-Wl,--as-needed")
@@ -120,7 +120,9 @@ target_link_libraries(mc_mujoco PRIVATE mc_mujoco_lib Boost::program_options Boo
 set_target_properties(mc_mujoco
     PROPERTIES
     INSTALL_RPATH "${PROJECT_SOURCE_DIR}/ext/libtorch/lib"
-    INSTALL_RPATH_USE_LINK_PATH TRUE)
+    INSTALL_RPATH_USE_LINK_PATH TRUE
+    CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}"
+)
 
 install(TARGETS mc_mujoco
   RUNTIME DESTINATION bin
